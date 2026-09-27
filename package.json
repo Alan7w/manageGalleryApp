@@ -1,0 +1,38 @@
+{
+  "name": "sift",
+  "productName": "Sift",
+  "version": "0.1.0",
+  "description": "Tidy up your photo library: duplicates, burst shots, blurry photos and junk, found and cleaned up safely.",
+  "author": "Asadkhon Rasulov",
+  "private": true,
+  "main": "./out/main/index.js",
+  "scripts": {
+    "dev": "npm run build:native && env -u ELECTRON_RUN_AS_NODE electron-vite dev",
+    "build": "npm run typecheck && npm run build:native && electron-vite build",
+    "start": "env -u ELECTRON_RUN_AS_NODE electron-vite preview",
+    "build:native": "node scripts/build-native.mjs",
+    "typecheck": "tsc --noEmit -p tsconfig.node.json && tsc --noEmit -p tsconfig.web.json",
+    "dist": "npm run build && electron-builder --mac"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@tanstack/react-query": "^5.104.0",
+    "@tanstack/react-virtual": "^3.14.13",
+    "@types/node": "^24.19.0",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^5.2.0",
+    "clsx": "^2.1.1",
+    "electron": "^44.4.5",
+    "electron-builder": "^26.15.3",
+    "electron-vite": "^5.0.0",
+    "lucide-react": "^1.48.0",
+    "motion": "^13.4.4",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "tailwindcss": "^4.3.3",
+    "typescript": "~5.9.3",
+    "vite": "^7.3.6",
+    "zustand": "^5.0.15"
+  }
+}

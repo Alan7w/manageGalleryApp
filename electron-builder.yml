@@ -1,0 +1,18 @@
+appId: app.sift.gallery
+productName: Sift
+directories:
+  buildResources: resources
+  output: dist
+files:
+  - out/**
+  - package.json
+# The native analyzer ships next to the app (see src/main/paths.ts → analyzerBinary()).
+extraResources:
+  - from: resources/bin/sift-analyzer
+    to: bin/sift-analyzer
+mac:
+  category: public.app-category.photography
+  target:
+    - target: dmg
+  # Local builds are ad-hoc signed; set up a Developer ID to distribute to others.
+  identity: null
