@@ -86,5 +86,8 @@ app.on('before-quit', (e) => {
     interactive.stop()
     closeDatabase()
     app.quit()
+    // A quit that began with SIGTERM (e.g. `kill`) can stall after the window closes.
+    // Everything is cleaned up by now, so exit rather than hang.
+    setTimeout(() => app.exit(0), 3000)
   })
 })
