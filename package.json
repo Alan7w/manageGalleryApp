@@ -11,10 +11,14 @@
     "build": "npm run typecheck && npm run build:native && electron-vite build",
     "start": "env -u ELECTRON_RUN_AS_NODE electron-vite preview",
     "build:native": "node scripts/build-native.mjs",
+    "build:icon": "env -u ELECTRON_RUN_AS_NODE electron scripts/build-icon.mjs",
     "typecheck": "tsc --noEmit -p tsconfig.node.json && tsc --noEmit -p tsconfig.web.json",
+    "install:app": "npm run build && electron-builder --mac --dir && node scripts/install-app.mjs",
+    "setup:signing": "node scripts/setup-signing.mjs",
     "dist": "npm run build && electron-builder --mac"
   },
   "devDependencies": {
+    "@electron/osx-sign": "^1.3.3",
     "@tailwindcss/vite": "^4.3.3",
     "@tanstack/react-query": "^5.104.0",
     "@tanstack/react-virtual": "^3.14.13",

@@ -1,8 +1,10 @@
 appId: app.sift.gallery
 productName: Sift
+copyright: © 2026 Asadkhon Rasulov
 directories:
-  buildResources: resources
+  buildResources: resources # icon.icns lives here
   output: dist
+afterPack: ./scripts/sign-app.mjs
 files:
   - out/**
   - package.json
@@ -12,7 +14,22 @@ extraResources:
     to: bin/sift-analyzer
 mac:
   category: public.app-category.photography
+  minimumSystemVersion: '14.0'
   target:
     - target: dmg
-  # Local builds are ad-hoc signed; set up a Developer ID to distribute to others.
+      arch: arm64
+  # Signing happens in the afterPack hook below (scripts/sign-app.mjs): with the local
+  # certificate from `npm run setup:signing` if present, otherwise ad-hoc. Either is free and
+  # enough for Apple Silicon; friends see a one-time Gatekeeper prompt (README → Sharing).
+  # A paid Developer ID + notarization would remove that prompt.
   identity: null
+  notarize: false
+  # Shown by macOS when Sift first reads a protected location.
+  extendInfo:
+    NSDesktopFolderUsageDescription: Sift reads the photos in the folders you add so it can find duplicates and bursts.
+    NSDocumentsFolderUsageDescription: Sift reads the photos in the folders you add so it can find duplicates and bursts.
+    NSDownloadsFolderUsageDescription: Sift reads the photos in the folders you add so it can find duplicates and bursts.
+    NSRemovableVolumesUsageDescription: Sift reads the photos on the drives you add so it can find duplicates and bursts.
+    NSNetworkVolumesUsageDescription: Sift reads the photos on the network drives you add so it can find duplicates and bursts.
+dmg:
+  title: Sift ${version}

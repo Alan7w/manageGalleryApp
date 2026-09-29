@@ -49,6 +49,8 @@ function createWindow(): BrowserWindow {
 
 app.whenReady().then(() => {
   nativeTheme.themeSource = 'dark'
+  // The packaged app gets its icon from the bundle; in development show it in the Dock too.
+  if (!app.isPackaged) app.dock?.setIcon(join(app.getAppPath(), 'resources', 'icon.png'))
   openDatabase()
   pruneTrashed()
   handleProtocol()

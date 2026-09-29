@@ -26,13 +26,50 @@ On the first launch, click **Add Folder or Drive…**, or drag folders from Find
 
 | Script | What it does |
 | --- | --- |
-| `npm run dev` | Development app with hot reload |
+| `npm run install:app` | Build `Sift.app` and install it into `/Applications` (replaces an older Sift) |
+| `npm run dist` | Build `dist/Sift-<version>-arm64.dmg` to share |
+| `npm run setup:signing` | One time: create the signing certificate so macOS remembers Sift's permissions |
+| `npm run dev` | Development app with hot reload (dev server on port 5319) |
 | `npm run build` | Typecheck, compile the Swift helper, bundle the app into `out/` |
 | `npm start` | Run the bundled app from `out/` |
-| `npm run dist` | Build a `.dmg` into `dist/` (not tested yet) |
 | `npm run build:native -- --force` | Recompile the Swift helper |
+| `npm run build:icon` | Regenerate `resources/icon.icns` after editing `resources/icon.svg` |
 
 **Testing without touching your real library:** set `SIFT_DATA_DIR` to use a separate index, e.g. `SIFT_DATA_DIR=/tmp/sift-test npm run dev`.
+
+## Installing on your Mac
+
+```sh
+npm run install:app
+```
+
+This builds Sift, copies it to `/Applications`, and opens it. After that, launch Sift from Launchpad, Spotlight or the Dock like any other app. No terminal or dev server is needed. Run the same command again after pulling changes to update it.
+
+The installed app and `npm run dev` share the same library (`~/Library/Application Support/Sift`), so only one of them can run at a time.
+
+### Keeping permissions across updates
+
+macOS remembers which folders and drives you let Sift read, per app signature. Run this once per Mac that builds Sift:
+
+```sh
+npm run setup:signing
+```
+
+It creates a self-signed certificate, **Sift Local Signing**, in its own keychain at `~/.sift-signing` (your login keychain and trust settings are untouched). Every build is then signed with it (`scripts/sign-app.mjs`), so macOS asks for access only once, not after every update. Without it, builds get a free ad-hoc signature and work the same, but permissions are asked again after each update.
+
+Back up `~/.sift-signing` if you move to a new Mac: a new certificate means everyone is asked once more. To remove it: `security delete-keychain ~/.sift-signing/sift-signing.keychain-db && rm -rf ~/.sift-signing`.
+
+## Sharing with friends
+
+`npm run dist` creates `dist/Sift-<version>-arm64.dmg`. Send that file (AirDrop, Drive, Telegram…). It runs on Apple Silicon Macs with macOS 14 or newer.
+
+Sift isn't signed with a paid Apple Developer ID, so the first time a friend opens it, macOS says it can't verify the app. To allow it once:
+
+1. Open the `.dmg` and drag **Sift** to **Applications**.
+2. Open Sift. When macOS warns, click **Done**.
+3. Go to **System Settings → Privacy & Security**, scroll down, and click **Open Anyway** next to the Sift message. Confirm with your password.
+
+After that, Sift opens normally. (Alternative for people comfortable with the Terminal: `xattr -dr com.apple.quarantine /Applications/Sift.app`.)
 
 ## How it works
 

@@ -1,0 +1,67 @@
+<!-- Sift app icon: a burst of photos with the keeper on top.
+     Follows the macOS icon grid (824px body inside a 1024px canvas).
+     Regenerate icon.icns / icon.png with `npm run build:icon`. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="body" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#a293ff"/>
+      <stop offset="0.55" stop-color="#7564ff"/>
+      <stop offset="1" stop-color="#4a36d9"/>
+    </linearGradient>
+    <linearGradient id="gloss" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity="0.22"/>
+      <stop offset="0.5" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6c5cf0"/>
+      <stop offset="0.62" stop-color="#c58cf0"/>
+      <stop offset="1" stop-color="#ffc48a"/>
+    </linearGradient>
+    <linearGradient id="ridge" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3b2ca8"/>
+      <stop offset="1" stop-color="#2a1f7a"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffd976"/>
+      <stop offset="1" stop-color="#f0b43a"/>
+    </linearGradient>
+    <clipPath id="photo">
+      <rect x="326" y="294" width="372" height="452" rx="24"/>
+    </clipPath>
+    <filter id="iconShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="12" stdDeviation="14" flood-color="#000" flood-opacity="0.3"/>
+    </filter>
+    <filter id="cardShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="14" stdDeviation="16" flood-color="#1a1050" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <!-- Body -->
+  <g filter="url(#iconShadow)">
+    <rect x="100" y="100" width="824" height="824" rx="185" fill="url(#body)"/>
+  </g>
+  <rect x="100" y="100" width="824" height="824" rx="185" fill="url(#gloss)"/>
+
+  <!-- The rest of the burst -->
+  <g filter="url(#cardShadow)">
+    <rect x="302" y="270" width="420" height="500" rx="44" fill="#fff" fill-opacity="0.34" transform="rotate(-16 512 540)"/>
+    <rect x="302" y="270" width="420" height="500" rx="44" fill="#fff" fill-opacity="0.6" transform="rotate(-7 512 540)"/>
+  </g>
+
+  <!-- The keeper -->
+  <g transform="rotate(5 512 540)">
+    <rect x="302" y="270" width="420" height="500" rx="44" fill="#fff" filter="url(#cardShadow)"/>
+    <g clip-path="url(#photo)">
+      <rect x="326" y="294" width="372" height="452" fill="url(#sky)"/>
+      <circle cx="590" cy="520" r="54" fill="#ffe7a8"/>
+      <path d="M300 690 L420 540 L500 628 L590 520 L740 700 L740 760 L300 760 Z" fill="url(#ridge)" fill-opacity="0.75"/>
+      <path d="M300 760 L300 668 Q420 610 520 660 T740 640 L740 760 Z" fill="#23196a"/>
+    </g>
+    <!-- Keep badge -->
+    <g transform="translate(706 290)">
+      <circle r="74" fill="#fff"/>
+      <circle r="60" fill="url(#gold)"/>
+      <path d="M-26 2 L-7 21 L28 -18" fill="none" stroke="#2a1f7a" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+  </g>
+</svg>
