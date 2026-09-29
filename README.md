@@ -9,6 +9,8 @@ A Mac app that tidies up your photo library. It finds duplicates, burst shots, b
 - **Smart search.** Search for things like “beach”, “dog”, “2024”, “screenshots” or a camera name. Everything runs locally.
 - **Safe by design.** Nothing is deleted on its own. Removed items go to a **Review Bin**, then to the **macOS Trash** only when you confirm, and every batch can be **restored** in one click.
 
+**Using Sift:** see the illustrated guidebook in [`docs/guide/`](docs/guide/index.html) (install, first steps, every screen, shortcuts, FAQ). **Phone version:** see [`docs/MOBILE_PLAN.md`](docs/MOBILE_PLAN.md).
+
 ## Requirements
 
 - macOS 14 or newer (the aesthetic score needs macOS 15+)

@@ -1,0 +1,743 @@
+<title>Sift Guidebook</title>
+<meta name="description" content="How to install Sift on your Mac and use it to clean up your photo library." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Instrument+Sans:ital,wght@0,400..700;1,400&family=JetBrains+Mono:wght@400;500&display=swap"
+/>
+<style>
+  /* Dark first, like Sift itself. */
+  :root {
+    color-scheme: dark;
+    --bg: #0f0f13;
+    --surface: #17171d;
+    --surface-2: #202028;
+    --line: rgb(255 255 255 / 0.08);
+    --line-strong: rgb(255 255 255 / 0.16);
+    --text: #ecebf3;
+    --muted: #a6a4b8;
+    --dim: #76748a;
+    --accent: #9d90ff;
+    --accent-strong: #7564ff;
+    --accent-soft: rgb(143 128 255 / 0.14);
+    --keep: #f6c350;
+    --keep-soft: rgb(246 195 80 / 0.14);
+    --remove: #ff6b79;
+    --remove-soft: rgb(255 91 107 / 0.13);
+    --ok: #3ed99a;
+    --shadow: 0 40px 80px -40px rgb(0 0 0 / 0.75);
+    --w1: #9d90ff;
+    --w2: #7a6af0;
+    --w3: #5b4bd0;
+    --w4: #4435a8;
+    --w5: #33287e;
+    --display: 'Bricolage Grotesque', 'SF Pro Display', -apple-system, 'Helvetica Neue', sans-serif;
+    --body: 'Instrument Sans', -apple-system, 'Helvetica Neue', Arial, sans-serif;
+    --mono: 'JetBrains Mono', 'SF Mono', ui-monospace, Menlo, monospace;
+  }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme='dark']) {
+      color-scheme: light;
+      --bg: #f6f5fb;
+      --surface: #ffffff;
+      --surface-2: #eeecf7;
+      --line: rgb(40 30 100 / 0.1);
+      --line-strong: rgb(40 30 100 / 0.2);
+      --text: #17151f;
+      --muted: #555266;
+      --dim: #7d7a90;
+      --accent: #5a45e6;
+      --accent-strong: #4a35d6;
+      --accent-soft: rgb(90 69 230 / 0.1);
+      --keep: #8a5a00;
+      --keep-soft: rgb(246 195 80 / 0.28);
+      --remove: #c42a42;
+      --remove-soft: rgb(214 51 74 / 0.1);
+      --ok: #11855a;
+      --shadow: 0 40px 70px -40px rgb(30 20 80 / 0.45);
+      --w1: #7564ff;
+      --w2: #6352e8;
+      --w3: #4f3fcc;
+      --w4: #3d2fa8;
+      --w5: #2c2180;
+    }
+  }
+  :root[data-theme='light'] {
+    color-scheme: light;
+    --bg: #f6f5fb;
+    --surface: #ffffff;
+    --surface-2: #eeecf7;
+    --line: rgb(40 30 100 / 0.1);
+    --line-strong: rgb(40 30 100 / 0.2);
+    --text: #17151f;
+    --muted: #555266;
+    --dim: #7d7a90;
+    --accent: #5a45e6;
+    --accent-strong: #4a35d6;
+    --accent-soft: rgb(90 69 230 / 0.1);
+    --keep: #8a5a00;
+    --keep-soft: rgb(246 195 80 / 0.28);
+    --remove: #c42a42;
+    --remove-soft: rgb(214 51 74 / 0.1);
+    --ok: #11855a;
+    --shadow: 0 40px 70px -40px rgb(30 20 80 / 0.45);
+    --w1: #7564ff;
+    --w2: #6352e8;
+    --w3: #4f3fcc;
+    --w4: #3d2fa8;
+    --w5: #2c2180;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--body);
+    font-size: 16.5px;
+    line-height: 1.62;
+    padding-inline: 20px;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent); text-underline-offset: 3px; }
+  a:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+  b, strong { font-weight: 600; }
+  code {
+    font-family: var(--mono);
+    font-size: 0.84em;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 0.08em 0.4em;
+    overflow-wrap: anywhere;
+  }
+  kbd {
+    display: inline-block;
+    min-width: 1.7em;
+    font-family: var(--body);
+    font-size: 0.8em;
+    font-weight: 600;
+    line-height: 1.5;
+    text-align: center;
+    color: var(--text);
+    background: var(--surface-2);
+    border: 1px solid var(--line-strong);
+    border-bottom-width: 2px;
+    border-radius: 6px;
+    padding: 0 0.45em;
+    white-space: nowrap;
+  }
+
+  /* Layout: contents rail + reading column */
+  .page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-block: 40px 96px;
+    display: grid;
+    gap: 40px;
+  }
+  @media (min-width: 1080px) {
+    .page { grid-template-columns: 210px minmax(0, 1fr); gap: 64px; }
+    .toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 32px); align-self: start; }
+  }
+  main { min-width: 0; display: flex; flex-direction: column; gap: 72px; }
+  section { display: flex; flex-direction: column; gap: 18px; scroll-margin-top: 24px; }
+  .prose { max-width: 42rem; display: flex; flex-direction: column; gap: 14px; }
+  .prose p, .prose ul, .prose ol { margin: 0; }
+  .prose ul { padding-left: 1.2em; display: flex; flex-direction: column; gap: 6px; }
+
+  /* Contents */
+  .toc { font-size: 14px; display: flex; flex-direction: column; gap: 20px; }
+  .toc .brand { display: flex; align-items: center; gap: 10px; font-family: var(--display); font-weight: 700; font-size: 18px; color: var(--text); text-decoration: none; }
+  .toc .brand img { width: 30px; height: 30px; }
+  .toc h2 { font-family: var(--body); font-size: 11px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: var(--dim); margin: 0 0 6px; }
+  .toc ol, .toc ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+  .toc a { display: block; color: var(--muted); text-decoration: none; padding: 3px 0; }
+  .toc a:hover { color: var(--text); }
+  .toc .num { display: inline-block; width: 1.4em; color: var(--accent); font-variant-numeric: tabular-nums; }
+  @media (max-width: 1079px) {
+    .toc { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px 32px; padding: 18px 20px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; }
+    .toc .brand { grid-column: 1 / -1; }
+  }
+
+  /* Hero */
+  .hero { display: flex; flex-direction: column; gap: 22px; padding-top: 8px; }
+  .hero-top { display: flex; align-items: center; gap: 18px; }
+  .hero-top img { width: 84px; height: 84px; margin: -10px; }
+  .eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: var(--accent); margin: 0; }
+  h1 {
+    font-family: var(--display);
+    font-size: clamp(2.6rem, 6vw, 4rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin: 4px 0 0;
+  }
+  .lede { font-size: 1.2rem; line-height: 1.55; color: var(--muted); max-width: 40rem; margin: 0; text-wrap: pretty; }
+  .lede b { color: var(--text); }
+  .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 1px; margin: 6px 0 0; background: var(--line); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+  .facts div { background: var(--surface); padding: 14px 16px; }
+  .facts dt { font-size: 11px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: var(--dim); }
+  .facts dd { margin: 4px 0 0; font-size: 15px; }
+
+  /* Headings */
+  .kicker { font-size: 12px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: var(--accent); margin: 0 0 -8px; }
+  h2 { font-family: var(--display); font-size: clamp(1.7rem, 3.4vw, 2.2rem); font-weight: 700; letter-spacing: -0.02em; line-height: 1.12; margin: 0; text-wrap: balance; }
+  h3 { font-family: var(--display); font-size: 1.25rem; font-weight: 650; letter-spacing: -0.01em; margin: 12px 0 0; text-wrap: balance; }
+
+  /* Screenshots in a Mac window frame. The traffic lights sit where macOS draws them. */
+  figure { margin: 8px 0; display: flex; flex-direction: column; gap: 10px; }
+  .frame { position: relative; border-radius: 12px; overflow: hidden; border: 1px solid var(--line-strong); box-shadow: var(--shadow); background: #0f0f12; }
+  .frame img { display: block; width: 100%; height: auto; }
+  .frame .lights { position: absolute; inset: 0; pointer-events: none; }
+  .frame .lights i { position: absolute; top: 2.1%; width: 0.93%; aspect-ratio: 1; border-radius: 50%; }
+  .frame .lights i:nth-child(1) { left: 1.4%; background: #ff5f57; }
+  .frame .lights i:nth-child(2) { left: 2.95%; background: #febc2e; }
+  .frame .lights i:nth-child(3) { left: 4.5%; background: #28c840; }
+  figcaption { font-size: 14px; color: var(--muted); max-width: 42rem; }
+  .pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+  @media (max-width: 760px) { .pair { grid-template-columns: 1fr; } }
+
+  /* Install steps: a real sequence */
+  ol.steps { list-style: none; margin: 0; padding: 0; counter-reset: step; display: flex; flex-direction: column; gap: 14px; max-width: 42rem; }
+  ol.steps li { counter-increment: step; display: grid; grid-template-columns: 34px 1fr; gap: 14px; align-items: start; }
+  ol.steps li::before {
+    content: counter(step);
+    display: grid; place-items: center;
+    width: 30px; height: 30px; border-radius: 50%;
+    background: var(--accent-soft); color: var(--accent);
+    font-weight: 700; font-size: 14px; font-variant-numeric: tabular-nums;
+  }
+
+  .note { max-width: 42rem; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 18px; font-size: 15px; color: var(--muted); display: flex; flex-direction: column; gap: 6px; }
+  .note .label { font-size: 11px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: var(--text); }
+
+  /* Badges as they appear in Sift */
+  .badge { display: inline-block; border-radius: 999px; padding: 0.05em 0.6em; font-size: 0.82em; font-weight: 600; white-space: nowrap; }
+  .badge.good { background: var(--keep-soft); color: var(--keep); }
+  .badge.bad { background: var(--remove-soft); color: var(--remove); }
+
+  /* Best-shot recipe, drawn to scale (weights add up to 100) */
+  .recipe { max-width: 42rem; display: flex; flex-direction: column; gap: 10px; }
+  .recipe .bar { display: flex; height: 14px; border-radius: 999px; overflow: hidden; }
+  .recipe .bar span { display: block; height: 100%; }
+  .recipe ul { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px 16px; font-size: 14px; }
+  .recipe li { display: flex; align-items: baseline; gap: 8px; }
+  .recipe li i { width: 10px; height: 10px; border-radius: 3px; flex: none; transform: translateY(1px); }
+  .recipe li b { font-variant-numeric: tabular-nums; }
+  .recipe li span { color: var(--muted); }
+
+  /* Safety flow */
+  .flow { list-style: none; margin: 4px 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+  .flow li { position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; display: flex; flex-direction: column; gap: 6px; }
+  .flow li:not(:last-child)::after { content: '→'; position: absolute; right: -12px; top: 50%; transform: translate(50%, -50%); color: var(--dim); font-size: 18px; }
+  .flow .stage { font-weight: 600; }
+  .flow .what { font-size: 14px; color: var(--muted); }
+  .flow .undo { font-size: 13px; color: var(--ok); margin-top: auto; }
+  .flow .final .undo { color: var(--remove); }
+  @media (max-width: 860px) {
+    .flow { grid-template-columns: 1fr; }
+    .flow li:not(:last-child)::after { content: '↓'; right: 50%; top: auto; bottom: -12px; transform: translate(50%, 50%); }
+  }
+
+  /* Tables */
+  .table-wrap { overflow-x: auto; max-width: 48rem; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+  table { width: 100%; border-collapse: collapse; font-size: 15px; }
+  th, td { text-align: left; padding: 10px 16px; border-top: 1px solid var(--line); vertical-align: top; }
+  thead th { border-top: 0; font-size: 11px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: var(--dim); }
+  td:first-child { white-space: nowrap; width: 1%; }
+  .keys-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+  .keys-grid h3 { margin: 0 0 10px; font-size: 1.05rem; }
+  .keys-grid .table-wrap { max-width: none; }
+
+  /* FAQ */
+  details { max-width: 44rem; border-top: 1px solid var(--line); padding: 14px 0; }
+  details:last-of-type { border-bottom: 1px solid var(--line); }
+  summary { cursor: pointer; font-weight: 600; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: '+'; color: var(--accent); font-weight: 500; font-size: 1.2em; line-height: 1; }
+  details[open] summary::after { content: '–'; }
+  details .answer { margin-top: 10px; color: var(--muted); display: flex; flex-direction: column; gap: 10px; }
+  details .answer p { margin: 0; }
+
+  footer { max-width: 44rem; font-size: 14px; color: var(--dim); border-top: 1px solid var(--line); padding-top: 20px; }
+  footer p { margin: 0 0 6px; }
+
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+</style>
+
+<div class="page">
+  <nav class="toc" aria-label="Contents">
+    <a class="brand" href="#top"><img src="img/icon.png" alt="" width="30" height="30" />Sift</a>
+    <div>
+      <h2>Getting started</h2>
+      <ol>
+        <li><a href="#install"><span class="num">1</span>Install Sift</a></li>
+        <li><a href="#add"><span class="num">2</span>Add your photos</a></li>
+        <li><a href="#analyze"><span class="num">3</span>Let Sift look</a></li>
+        <li><a href="#similar"><span class="num">4</span>Clean up bursts</a></li>
+      </ol>
+    </div>
+    <div>
+      <h2>Using Sift</h2>
+      <ul>
+        <li><a href="#duplicates">Duplicates</a></li>
+        <li><a href="#more">Blurry, Junk, Large Videos</a></li>
+        <li><a href="#bin">Review Bin &amp; Trash</a></li>
+        <li><a href="#browse">Library, viewer &amp; search</a></li>
+        <li><a href="#settings">Settings</a></li>
+        <li><a href="#keys">Keyboard shortcuts</a></li>
+        <li><a href="#faq">Questions &amp; fixes</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <header class="hero" id="top">
+      <div class="hero-top">
+        <img src="img/icon.png" alt="Sift app icon" width="84" height="84" />
+        <div>
+          <p class="eyebrow">Guidebook · Sift 0.1</p>
+          <h1>Sift</h1>
+        </div>
+      </div>
+      <p class="lede">
+        Sift tidies up the photos on your Mac. It finds <b>burst shots, duplicates, blurry photos and junk</b> across all your folders and
+        drives, picks the best shot of each moment, and lets you clean up in minutes. Nothing is deleted without your say, and nothing leaves
+        your Mac.
+      </p>
+      <dl class="facts">
+        <div><dt>Runs on</dt><dd>Macs with Apple silicon (M1 or later)</dd></div>
+        <div><dt>Needs</dt><dd>macOS 14 Sonoma or newer</dd></div>
+        <div><dt>Download</dt><dd>Sift-0.1.0-arm64.dmg, 129 MB</dd></div>
+        <div><dt>Privacy</dt><dd>Works offline. No account, no uploads.</dd></div>
+      </dl>
+    </header>
+
+    <!-- 1 · Install -->
+    <section id="install">
+      <p class="kicker">Step 1</p>
+      <h2>Install Sift</h2>
+      <ol class="steps">
+        <li><div><b>Open the file <code>Sift-0.1.0-arm64.dmg</code>.</b> A window opens showing Sift and your Applications folder.</div></li>
+        <li><div><b>Drag Sift onto Applications.</b> Then eject the “Sift 0.1.0” disk in the Finder sidebar.</div></li>
+        <li>
+          <div>
+            <b>Open Sift</b> from Applications or Launchpad. The first time, macOS says it can’t verify that Sift is safe. Click
+            <b>Done</b>. Sift is a free personal app that isn’t registered with Apple, which is the only reason for the warning.
+          </div>
+        </li>
+        <li>
+          <div>
+            Open <b>System Settings → Privacy &amp; Security</b>, scroll down to the message about Sift, and click <b>Open Anyway</b>. Confirm
+            with your Mac password. Sift opens.
+          </div>
+        </li>
+      </ol>
+      <div class="note">
+        <span class="label">Good to know</span>
+        <span>You only do this once. After that, Sift opens like any other app. To keep it handy, right-click its Dock icon and choose
+          <b>Options → Keep in Dock</b>.</span>
+      </div>
+    </section>
+
+    <!-- 2 · Add photos -->
+    <section id="add">
+      <p class="kicker">Step 2</p>
+      <h2>Add the places where your photos live</h2>
+      <figure>
+        <div class="frame"><img src="img/welcome.jpg" width="1800" height="1227" alt="Sift's welcome screen with an Add Folder or Drive button" /><span class="lights"><i></i><i></i><i></i></span></div>
+        <figcaption>The first time you open Sift, it asks for your photo folders.</figcaption>
+      </figure>
+      <div class="prose">
+        <p>
+          Click <b>Add Folder or Drive…</b>, or drag folders from Finder onto the window. Add as many as you like: Pictures, Desktop, an old
+          backup, an external hard drive. Sift shows them all as <b>one library</b>, and you can add more later with the <b>+</b> next to
+          <b>Sources</b> in the sidebar.
+        </p>
+        <p>
+          <b>macOS will ask for permission</b>, for example “Sift would like to access files in your Documents folder” or “…on a removable
+          volume”. Click <b>Allow</b>. Sift needs to read your photos to analyze them. It never changes them.
+        </p>
+        <ul>
+          <li>
+            <b>Main library ★.</b> The first folder you add becomes your main library. When the same file exists in two places, Sift keeps the
+            copy in the main library. To change it, hover a source, click <b>•••</b> and choose <b>Make main library</b>.
+          </li>
+          <li>
+            <b>External drives</b> can be unplugged. Their photos stay browsable (a grey dot means “not connected”), and you can clean them up
+            the next time you plug the drive in.
+          </li>
+          <li><b>Removing a source</b> (<b>•••</b> → <b>Remove from Sift…</b>) only makes Sift forget it. Your files are not touched.</li>
+          <li>
+            <b>Sift leaves some things alone:</b> Apple Photos libraries, other apps’ libraries (Lightroom, Final Cut, iMovie), hidden files and
+            your Library folder.
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 3 · Analyze -->
+    <section id="analyze">
+      <p class="kicker">Step 3</p>
+      <h2>Let Sift look at everything</h2>
+      <div class="prose">
+        <p>
+          Sift now reads every photo and video: date, camera, focus, exposure, faces, and what’s in the picture, using Apple’s AI that is built
+          into your Mac. The progress shows in the top bar. You can <b>pause</b> it, and the <b>↻</b> button checks your folders for changes
+          (Sift also does this every time it opens).
+        </p>
+        <p>
+          The first run takes a while on a big library. You can start cleaning straight away; the numbers keep growing until the top bar says
+          <b>Up to date</b>.
+        </p>
+      </div>
+      <figure>
+        <div class="frame"><img src="img/overview.jpg" width="1800" height="1227" alt="Overview: 375 MB could be freed, with cards for Similar and Bursts, Duplicates, Blurry, Junk and Large Videos" /><span class="lights"><i></i><i></i><i></i></span></div>
+        <figcaption>The Overview shows how much space you could free, and what kind of clean-up it would take. Click a card to start.</figcaption>
+      </figure>
+    </section>
+
+    <!-- 4 · Similar -->
+    <section id="similar">
+      <p class="kicker">Step 4</p>
+      <h2>Clean up bursts and similar shots</h2>
+      <div class="prose">
+        <p>
+          This is where most of the space hides: the eight photos you took of the same sunset. <b>Similar &amp; Bursts</b> groups shots of the
+          same moment and marks the best one with a crown.
+        </p>
+      </div>
+      <figure>
+        <div class="frame"><img src="img/similar.jpg" width="1800" height="1227" alt="A list of four groups of similar photos, each with its best shot marked with a crown" /><span class="lights"><i></i><i></i><i></i></span></div>
+        <figcaption>Each group shows when it was taken, how many shots it has and how much you’d free.</figcaption>
+      </figure>
+      <div class="prose">
+        <ul>
+          <li><b>Start reviewing</b> walks you through every group, one at a time. This is the recommended way.</li>
+          <li><b>Keep best</b> accepts Sift’s choice for one group without opening it.</li>
+          <li><b>Not similar</b> tells Sift the group is fine as it is. It won’t be suggested again.</li>
+          <li><b>Auto-pick best in all</b> accepts Sift’s choice everywhere at once. Everything else still goes to the Review Bin first.</li>
+        </ul>
+      </div>
+
+      <h3>Reviewing a group</h3>
+      <figure>
+        <div class="frame"><img src="img/review.jpg" width="1800" height="1227" alt="Review screen: the best shot is large with a Best pick badge, its score of 92, and a filmstrip of the other shots below" /><span class="lights"><i></i><i></i><i></i></span></div>
+        <figcaption>The best shot is pre-selected. Photos marked with a red × will go to the Review Bin when you press Return.</figcaption>
+      </figure>
+      <div class="prose">
+        <p>
+          Look through the shots with <kbd>←</kbd> <kbd>→</kbd>, press <kbd>Space</kbd> to keep or drop the one you’re looking at, and press
+          <kbd>Return</kbd> to confirm and move on. Press <kbd>C</kbd> to compare two shots side by side, and click a photo to zoom to 100%.
+          Changed your mind? <kbd>⌘</kbd><kbd>Z</kbd> undoes the last group.
+        </p>
+        <p>
+          The badges tell you why a shot won or lost: <span class="badge good">Sharpest</span> <span class="badge good">Best composition</span>
+          <span class="badge good">Best faces</span> <span class="badge bad">Blurry</span> <span class="badge bad">Too dark</span>
+          <span class="badge bad">Lower resolution</span>
+        </p>
+      </div>
+      <div class="recipe" role="img" aria-label="How the best shot is picked: focus 40%, composition 30%, faces 15%, exposure 10%, resolution 5%">
+        <div class="bar">
+          <span style="width: 40%; background: var(--w1)"></span>
+          <span style="width: 30%; background: var(--w2)"></span>
+          <span style="width: 15%; background: var(--w3)"></span>
+          <span style="width: 10%; background: var(--w4)"></span>
+          <span style="width: 5%; background: var(--w5)"></span>
+        </div>
+        <ul>
+          <li><i style="background: var(--w1)"></i><b>40%</b><span>Focus</span></li>
+          <li><i style="background: var(--w2)"></i><b>30%</b><span>Composition</span></li>
+          <li><i style="background: var(--w3)"></i><b>15%</b><span>How faces came out</span></li>
+          <li><i style="background: var(--w4)"></i><b>10%</b><span>Exposure</span></li>
+          <li><i style="background: var(--w5)"></i><b>5%</b><span>Resolution</span></li>
+        </ul>
+      </div>
+      <div class="prose">
+        <p>
+          That’s how the <b>shot score</b> is built. Focus is measured in small tiles, so a portrait with a soft background still counts as
+          sharp. If a group mixes things you didn’t expect, or misses shots you’d call the same moment, adjust <b>Similarity</b> and
+          <b>Burst window</b> in <a href="#settings">Settings</a>; the groups update right away.
+        </p>
+      </div>
+    </section>
+
+    <!-- Duplicates -->
+    <section id="duplicates">
+      <h2>Duplicates</h2>
+      <div class="prose">
+        <p>
+          Duplicates are files that are <b>exactly</b> the same, byte for byte, wherever they are: a photo in Pictures and again in an old
+          backup, or <code>IMG_4110 (1).JPG</code> next to the original. Since the copies are identical, removing the extras never loses a
+          photo.
+        </p>
+      </div>
+      <figure>
+        <div class="frame"><img src="img/duplicates.jpg" width="1800" height="1227" alt="Duplicates list: each file shows its copies, with the one to keep marked In main library, Original name and Oldest copy" /><span class="lights"><i></i><i></i><i></i></span></div>
+        <figcaption>For each file, Sift marks the copy to keep and explains why.</figcaption>
+      </figure>
+      <div class="prose">
+        <p>
+          Sift keeps the copy that is <span class="badge good">In main library</span>, has the <span class="badge good">Original name</span>
+          (not “copy” or “(1)”), isn’t sitting in Downloads or a messenger folder, and is the <span class="badge good">Oldest copy</span>. Click
+          <b>Keep one of each</b> to handle them all, or <b>Remove 1 copy</b> on a single file. You can pick a different copy with the circle
+          on the left.
+        </p>
+      </div>
+    </section>
+
+    <!-- Blurry, Junk, Large videos -->
+    <section id="more">
+      <h2>Blurry, Junk and Large Videos</h2>
+      <div class="pair">
+        <figure>
+          <div class="frame"><img src="img/blurry.jpg" width="1800" height="1227" alt="Blurry photos, blurriest first, with a slider from Only very blurry to Somewhat soft" loading="lazy" /><span class="lights"><i></i><i></i><i></i></span></div>
+          <figcaption><b>Blurry</b> lists out-of-focus and shaken photos, blurriest first. Move the slider and click Apply to be stricter or looser.</figcaption>
+        </figure>
+        <figure>
+          <div class="frame"><img src="img/junk.jpg" width="1800" height="1227" alt="Junk: a screenshot, a dark accidental photo and a tiny image, each labeled with its reason" loading="lazy" /><span class="lights"><i></i><i></i><i></i></span></div>
+          <figcaption><b>Junk</b> finds screenshots, dark pocket shots, photos of documents and receipts, and tiny images. Filter by reason at the top.</figcaption>
+        </figure>
+      </div>
+      <div class="prose">
+        <p><b>Large Videos</b> lists videos over 200 MB, biggest first. Change the size in <a href="#settings">Settings</a>.</p>
+        <p>
+          These screens show photos in a grid. <b>Click</b> a photo to open it. To act on several at once, <kbd>⌘</kbd>-click to select,
+          <kbd>Shift</kbd>-click to select a range, or <kbd>⌘</kbd><kbd>A</kbd> for all. Then choose <b>Remove</b> <kbd>⌫</kbd> or
+          <b>Keep</b> <kbd>K</kbd>. Kept photos stop appearing in the clean-up lists. The <b>Remove all</b> button at the top handles the whole
+          list.
+        </p>
+      </div>
+    </section>
+
+    <!-- Review bin -->
+    <section id="bin">
+      <h2>The Review Bin and the Trash</h2>
+      <div class="prose">
+        <p>Sift never deletes anything on its own. Everything you remove goes through three stops, and every step can be undone.</p>
+      </div>
+      <ol class="flow">
+        <li>
+          <span class="stage">You click Remove</span>
+          <span class="what">In any clean-up screen or while reviewing a group.</span>
+          <span class="undo">Undo right away, or ⌘Z</span>
+        </li>
+        <li>
+          <span class="stage">Review Bin</span>
+          <span class="what">A last look inside Sift. The file hasn’t moved yet.</span>
+          <span class="undo">Put back at any time</span>
+        </li>
+        <li>
+          <span class="stage">macOS Trash</span>
+          <span class="what">Only after you click Move to Trash and confirm.</span>
+          <span class="undo">Restore in Sift, or Put Back in Finder</span>
+        </li>
+        <li class="final">
+          <span class="stage">Gone</span>
+          <span class="what">Only when you empty the Trash yourself.</span>
+          <span class="undo">Can’t be undone</span>
+        </li>
+      </ol>
+      <div class="pair">
+        <figure>
+          <div class="frame"><img src="img/review-bin.jpg" width="1800" height="1227" alt="Review Bin with nine photos marked for removal and buttons Put all back and Move 9 to Trash" loading="lazy" /><span class="lights"><i></i><i></i><i></i></span></div>
+          <figcaption>The Review Bin. Select photos to put them back, or put all back.</figcaption>
+        </figure>
+        <figure>
+          <div class="frame"><img src="img/trash-confirm.jpg" width="1800" height="1227" alt="Confirmation: Move 9 items to the Trash? This frees 6.7 MB" loading="lazy" /><span class="lights"><i></i><i></i><i></i></span></div>
+          <figcaption>Sift always asks before moving anything to the Trash.</figcaption>
+        </figure>
+      </div>
+      <div class="prose">
+        <p>
+          After a batch goes to the Trash, the Review Bin shows it under <b>Recently removed</b> with a <b>Restore</b> button, as long as the
+          files are still in the Trash. Some external drives have no Trash; there, Sift moves files into a folder called
+          <code>Sift Removed</code> at the top of the drive instead.
+        </p>
+      </div>
+    </section>
+
+    <!-- Browse -->
+    <section id="browse">
+      <h2>Library, viewer and search</h2>
+      <div class="prose">
+        <p>
+          <b>Library</b> shows everything, newest first, grouped by month. Filter by photos, videos or source, and change the thumbnail size
+          with the slider in the top bar or <kbd>⌘</kbd><kbd>+</kbd> / <kbd>⌘</kbd><kbd>−</kbd>.
+        </p>
+      </div>
+      <figure>
+        <div class="frame"><img src="img/viewer.jpg" width="1800" height="1227" alt="Photo viewer with an info panel showing date, camera, size, focus and aesthetic score, and labels like cityscape and skyscraper" loading="lazy" /><span class="lights"><i></i><i></i><i></i></span></div>
+        <figcaption>The viewer, with the info panel open (<kbd>I</kbd>): when and where it was taken, quality scores, and what Sift recognized in it.</figcaption>
+      </figure>
+      <div class="prose">
+        <p>
+          In the viewer, browse with <kbd>←</kbd> <kbd>→</kbd>, remove with <kbd>⌫</kbd>, keep with <kbd>K</kbd>, and press <kbd>R</kbd> to
+          show the file in Finder. Click the photo to zoom in.
+        </p>
+      </div>
+      <figure>
+        <div class="frame"><img src="img/search.jpg" width="1800" height="1227" alt="Search results for city: skyline and Great Wall photos" loading="lazy" /><span class="lights"><i></i><i></i><i></i></span></div>
+        <figcaption>Searching for “city”. Everything is found on your Mac; nothing is sent anywhere.</figcaption>
+      </figure>
+      <div class="prose">
+        <p>Press <kbd>⌘</kbd><kbd>F</kbd> and type what you’re looking for. You can combine words, like <code>beach 2024</code> or <code>dog july</code>:</p>
+        <ul>
+          <li><b>Things in the photo:</b> beach, sunset, food, dog, snow, city, document…</li>
+          <li><b>Dates:</b> a year (<code>2023</code>) or a month (<code>july</code>)</li>
+          <li><b>Kinds:</b> <code>videos</code>, <code>photos</code>, <code>screenshots</code>, <code>people</code></li>
+          <li><b>Names:</b> part of a file name, folder name or camera (<code>iphone</code>, <code>vacation</code>)</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Settings -->
+    <section id="settings">
+      <h2>Settings</h2>
+      <figure>
+        <div class="frame"><img src="img/settings.jpg" width="1800" height="1227" alt="Settings: Similarity, Burst window, Blur threshold, Dark shot threshold, Large video size, and Smart analysis" loading="lazy" /><span class="lights"><i></i><i></i><i></i></span></div>
+      </figure>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Setting</th><th>What it changes</th></tr></thead>
+          <tbody>
+            <tr><td>Similarity</td><td>How alike photos must look to be grouped. Looser finds more groups; stricter groups only near-identical shots.</td></tr>
+            <tr><td>Burst window</td><td>How far apart in time photos can be and still count as the same moment. Default 1 minute.</td></tr>
+            <tr><td>Blur threshold</td><td>Photos with a focus score below this are listed as Blurry.</td></tr>
+            <tr><td>Dark shot threshold</td><td>Photos darker than this are listed under Junk as accidental shots.</td></tr>
+            <tr><td>Large video size</td><td>Videos bigger than this appear in Large Videos. Default 200 MB.</td></tr>
+            <tr><td>Smart analysis</td><td>Uses Apple’s built-in AI to compare shots, score composition and faces, and recognize what’s in photos for search. Turn it off for about twice the speed with simpler results.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Keys -->
+    <section id="keys">
+      <h2>Keyboard shortcuts</h2>
+      <div class="keys-grid">
+        <div>
+          <h3>Reviewing a group</h3>
+          <div class="table-wrap">
+            <table>
+              <tbody>
+                <tr><td><kbd>←</kbd> <kbd>→</kbd></td><td>Previous / next shot</td></tr>
+                <tr><td><kbd>1</kbd>–<kbd>9</kbd></td><td>Jump to a shot</td></tr>
+                <tr><td><kbd>Space</kbd></td><td>Keep or drop this shot</td></tr>
+                <tr><td><kbd>B</kbd></td><td>Keep only this shot</td></tr>
+                <tr><td><kbd>A</kbd></td><td>Keep all shots</td></tr>
+                <tr><td><kbd>C</kbd></td><td>Compare side by side</td></tr>
+                <tr><td><kbd>↑</kbd> <kbd>↓</kbd></td><td>Previous / next group</td></tr>
+                <tr><td><kbd>Return</kbd></td><td>Confirm and go to the next group</td></tr>
+                <tr><td><kbd>⌘</kbd><kbd>Z</kbd></td><td>Undo the last group</td></tr>
+                <tr><td><kbd>Esc</kbd></td><td>Back to the list</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div>
+          <h3>Viewer</h3>
+          <div class="table-wrap">
+            <table>
+              <tbody>
+                <tr><td><kbd>←</kbd> <kbd>→</kbd></td><td>Previous / next photo</td></tr>
+                <tr><td><kbd>⌫</kbd></td><td>Remove, or put back</td></tr>
+                <tr><td><kbd>K</kbd></td><td>Keep</td></tr>
+                <tr><td><kbd>I</kbd></td><td>Show or hide info</td></tr>
+                <tr><td><kbd>R</kbd></td><td>Show in Finder</td></tr>
+                <tr><td><kbd>Esc</kbd></td><td>Close</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3 style="margin-top: 20px">Grids and everywhere</h3>
+          <div class="table-wrap">
+            <table>
+              <tbody>
+                <tr><td><kbd>⌘</kbd>-click</td><td>Select a photo</td></tr>
+                <tr><td><kbd>Shift</kbd>-click</td><td>Select a range</td></tr>
+                <tr><td><kbd>⌘</kbd><kbd>A</kbd></td><td>Select all</td></tr>
+                <tr><td><kbd>⌫</kbd> / <kbd>K</kbd></td><td>Remove / keep the selection</td></tr>
+                <tr><td><kbd>⌘</kbd><kbd>F</kbd></td><td>Search</td></tr>
+                <tr><td><kbd>⌘</kbd><kbd>+</kbd> <kbd>⌘</kbd><kbd>−</kbd></td><td>Bigger / smaller thumbnails</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq">
+      <h2>Questions and fixes</h2>
+      <div>
+        <details>
+          <summary>macOS says Sift “can’t be opened” or “is damaged”</summary>
+          <div class="answer">
+            <p>Follow <a href="#install">Step 1</a>: click Done, then <b>System Settings → Privacy &amp; Security → Open Anyway</b>.</p>
+            <p>If macOS insists the app is damaged, open Terminal and run this once, then open Sift again:</p>
+            <p><code>xattr -dr com.apple.quarantine /Applications/Sift.app</code></p>
+          </div>
+        </details>
+        <details>
+          <summary>How do I update to a new version?</summary>
+          <div class="answer">
+            <p>
+              Quit Sift (<kbd>⌘</kbd><kbd>Q</kbd>), open the new <code>.dmg</code>, drag Sift onto Applications and choose <b>Replace</b>. Your
+              library, decisions and Review Bin are kept. macOS may ask you to click <b>Open Anyway</b> once more for the new download.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>Can Sift clean my iPhone or my Apple Photos library?</summary>
+          <div class="answer">
+            <p>
+              Not yet. Sift works with folders and drives. Support for the Apple Photos library and phone versions for iPhone and Android are
+              planned.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>Does Sift upload my photos or need the internet?</summary>
+          <div class="answer">
+            <p>No. All analysis happens on your Mac with Apple’s built-in frameworks. There’s no account and nothing is sent anywhere.</p>
+          </div>
+        </details>
+        <details>
+          <summary>The first scan is slow</summary>
+          <div class="answer">
+            <p>
+              Sift looks at every photo in detail the first time. After that it only checks what changed, which is quick. You can pause it from
+              the top bar, clean up while it works, or turn off <b>Smart analysis</b> in Settings to go about twice as fast with simpler
+              results.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>Where does Sift keep its data? How do I start over?</summary>
+          <div class="answer">
+            <p>
+              In <code>~/Library/Application Support/Sift</code>: the index of your library and the thumbnails. To start fresh, quit Sift and
+              delete that folder. Your photos are not affected.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>How do I uninstall Sift?</summary>
+          <div class="answer">
+            <p>
+              Quit Sift and drag it from Applications to the Trash. To remove its index and thumbnails too, delete
+              <code>~/Library/Application Support/Sift</code>. Your photos are not affected.
+            </p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <footer>
+      <p>Sift 0.1 is a personal project by Asadkhon Rasulov.</p>
+      <p>The photos in these screenshots are a demo library made from Apple’s aerial screen-saver footage.</p>
+    </footer>
+  </main>
+</div>
